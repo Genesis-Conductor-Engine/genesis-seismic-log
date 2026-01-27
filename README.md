@@ -1,14 +1,33 @@
 # Genesis Seismic Log
 
+```
+╔══════════════════════════════════════════════════════════════════╗
+║  🌊 SEISMIC TREE-OF-THOUGHTS (S-ToT) PROTOCOL                   ║
+║  Topological Truth Verification for Thermodynamic AI            ║
+║                                                                  ║
+║  ⚡ 200x+ speedup  |  🔋 2,380x energy efficiency              ║
+║  🔐 Ed25519 attestation  |  ❄️ CRYSTALLINE status              ║
+╚══════════════════════════════════════════════════════════════════╝
+```
+
 **Topological Truth Verification for Thermodynamic AI Models**
 
 [![Status: Operational](https://img.shields.io/badge/status-operational-green.svg)](https://qmem.genesisconductor.io)
 [![Protocol: S-ToT](https://img.shields.io/badge/protocol-S--ToT-blue.svg)](#s-tot-protocol)
 [![Energy Efficiency: 2380x](https://img.shields.io/badge/efficiency-2380x-brightgreen.svg)](#performance-metrics)
+[![Live Demo](https://img.shields.io/badge/live-demo-purple.svg)](https://qmem.genesisconductor.io/api/bench/live)
 
 ## Overview
 
 Genesis Seismic Log implements the **S-ToT (Seismic Tree-of-Thoughts)** protocol—a topological reasoning framework that validates AI model outputs through structural invariance testing rather than probabilistic confidence.
+
+### Quick Links
+- 🌐 **[Live API Demo](https://qmem.genesisconductor.io/api/bench/live)** - Real-time performance metrics
+- 📖 **[API Documentation](#api-endpoints)** - Complete endpoint reference
+- 🔬 **[S-ToT Protocol](#s-tot-protocol)** - Technical specification
+- 🚀 **[Quick Start](#local-development)** - Run it locally in 2 minutes
+
+### Key Features
 
 This system demonstrates:
 - **200x+ speedup** over cloud inference (GPU-accelerated local compute)
@@ -22,12 +41,12 @@ This system demonstrates:
 
 ### API Endpoints
 
-| Endpoint | Description |
-|----------|-------------|
-| `GET /` | Service info and available endpoints |
-| `GET /api/health` | System health and uptime status |
-| `GET /api/bench/live` | Real-time benchmarking metrics |
-| `GET /api/seismic/status` | S-ToT protocol verification status |
+| Endpoint | Description | Example |
+|----------|-------------|---------|
+| `GET /` | Service info and available endpoints | [Try it](https://qmem.genesisconductor.io/) |
+| `GET /api/health` | System health and uptime status | [Try it](https://qmem.genesisconductor.io/api/health) |
+| `GET /api/bench/live` | Real-time benchmarking metrics | [Try it](https://qmem.genesisconductor.io/api/bench/live) |
+| `GET /api/seismic/status` | S-ToT protocol verification status | [Try it](https://qmem.genesisconductor.io/api/seismic/status) |
 
 ### Example Usage
 
@@ -290,11 +309,24 @@ If you use Genesis Seismic Log in your research, please cite:
 }
 ```
 
-## Contact
+---
 
-- **Live Demo**: [https://qmem.genesisconductor.io](https://qmem.genesisconductor.io)
-- **GitHub**: [Genesis-Conductor-Engine/genesis-seismic-log](https://github.com/Genesis-Conductor-Engine/genesis-seismic-log)
+## Contact & Links
+
+### 🌐 Live System
+- **Public API**: [https://qmem.genesisconductor.io](https://qmem.genesisconductor.io)
+- **Live Metrics**: [/api/bench/live](https://qmem.genesisconductor.io/api/bench/live)
+- **S-ToT Status**: [/api/seismic/status](https://qmem.genesisconductor.io/api/seismic/status)
+
+### 📦 Development
+- **GitHub Repository**: [Genesis-Conductor-Engine/genesis-seismic-log](https://github.com/Genesis-Conductor-Engine/genesis-seismic-log)
+- **Issue Tracker**: [GitHub Issues](https://github.com/Genesis-Conductor-Engine/genesis-seismic-log/issues)
 - **Project**: Genesis Conductor v2.0
+
+### 📄 Documentation
+- **Setup Guide**: [DEPLOYMENT_COMPLETE.md](./DEPLOYMENT_COMPLETE.md)
+- **GitHub Deployment**: [DEPLOY_TO_GITHUB.md](./DEPLOY_TO_GITHUB.md)
+- **DNS Configuration**: [DNS_SETUP.md](./DNS_SETUP.md)
 
 ## License
 
@@ -302,6 +334,14 @@ MIT License - See [LICENSE](./LICENSE) for details.
 
 ---
 
-**Built with**: GTX 1650 | JAX | Ed25519 | Cloudflare | Zero-Trust Architecture
+<div align="center">
 
-**Status**: Production (Crystallized ✓)
+**Built with**: GTX 1650 · JAX · Ed25519 · Cloudflare · Zero-Trust Architecture
+
+**Status**: 🟢 Production (Crystallized ✓)
+
+**Energy Target**: 6.9% of Landauer limit @ 300K
+
+*Topological truth verification for the next generation of thermodynamic AI*
+
+</div>

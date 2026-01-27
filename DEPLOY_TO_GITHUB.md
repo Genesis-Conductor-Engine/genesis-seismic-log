@@ -68,7 +68,7 @@ cloudflare
 ### About Section
 
 ```
-Topological truth verification for thermodynamic AI models using S-ToT (Seismic Tree-of-Thoughts) protocol. 200x+ speedup, 2380x energy efficiency vs cloud. Live demo: https://seismic.genesisconductor.io
+Topological truth verification for thermodynamic AI models using S-ToT (Seismic Tree-of-Thoughts) protocol. 200x+ speedup, 2380x energy efficiency vs cloud. Live demo: https://qmem.genesisconductor.io
 ```
 
 ### Social Preview
@@ -90,8 +90,8 @@ Hi [Team],
 
 I've developed a topological truth verification system for thermodynamic AI models that might align with your work on low-energy inference.
 
-🔗 Live Demo: https://seismic.genesisconductor.io/api/bench/live
-📦 GitHub: https://github.com/YOUR_USERNAME/genesis-seismic-log
+🔗 Live Demo: https://qmem.genesisconductor.io/api/bench/live
+📦 GitHub: https://github.com/Genesis-Conductor-Engine/genesis-seismic-log
 
 Key Metrics:
 • 15,265 hash ops/sec on GTX 1650 (local)
@@ -128,8 +128,8 @@ A topological truth verification system for thermodynamic AI that achieves:
 
 The "Seismic Tree-of-Thoughts" (S-ToT) protocol validates AI outputs through structural invariance rather than probabilistic confidence.
 
-Live demo: https://seismic.genesisconductor.io
-Code: https://github.com/YOUR_USERNAME/genesis-seismic-log
+Live demo: https://qmem.genesisconductor.io
+Code: https://github.com/Genesis-Conductor-Engine/genesis-seismic-log
 
 Built with JAX, targeting Landauer limit efficiency (0.042 J/op vs 100 J/op cloud baseline).
 
@@ -156,13 +156,13 @@ Test your deployment from any device:
 
 ```bash
 # Health check
-curl https://seismic.genesisconductor.io/api/health
+curl https://qmem.genesisconductor.io/api/health
 
 # Benchmark metrics
-curl https://seismic.genesisconductor.io/api/bench/live
+curl https://qmem.genesisconductor.io/api/bench/live
 
 # S-ToT protocol status
-curl https://seismic.genesisconductor.io/api/seismic/status
+curl https://qmem.genesisconductor.io/api/seismic/status
 ```
 
 Expected response: JSON with status, metrics, and verification data.

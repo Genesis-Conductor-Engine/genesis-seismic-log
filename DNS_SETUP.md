@@ -1,15 +1,26 @@
-# DNS Configuration for seismic.genesisconductor.io
+# DNS Configuration for seismic.genesisconductor.io (Optional)
 
 ## Current Status
 
+✅ **Primary URL Active**: `https://qmem.genesisconductor.io` (operational)
 ✅ Cloudflare tunnel configured (tunnel ID: `15b1ac8a-d140-4c21-a1c1-4f91fb313309`)
 ✅ Seismic API server running on `localhost:8003`
 ✅ Ingress rule added to `/etc/cloudflared/config.yml`
-⏳ **DNS CNAME record needed**
+⏳ **Optional DNS CNAME record** for dedicated subdomain
 
-## Required DNS Configuration
+## Why This is Optional
 
-To make `seismic.genesisconductor.io` publicly accessible, add a CNAME record in Cloudflare DNS.
+The Genesis Seismic Log API is **already live** at:
+- **Primary URL**: `https://qmem.genesisconductor.io`
+
+Adding `seismic.genesisconductor.io` provides:
+- Dedicated subdomain for marketing/branding
+- Clearer URL that matches the project name
+- No functional difference—same API endpoints
+
+## Required DNS Configuration (Optional)
+
+To add `seismic.genesisconductor.io` as an additional domain, add a CNAME record in Cloudflare DNS.
 
 ### Step-by-Step Instructions
 
@@ -69,19 +80,18 @@ Expected response:
 }
 ```
 
-## Alternative: Use Existing qmem Subdomain
+## Alternative: Use Primary qmem Subdomain (Recommended)
 
-If you want to test immediately without waiting for DNS:
-
-The `qmem.genesisconductor.io` subdomain already points to port 8003:
+**The API is already live and accessible without any DNS changes:**
 
 ```bash
-# Test with existing subdomain
+# Test with primary subdomain (active now)
 curl https://qmem.genesisconductor.io/api/health
 curl https://qmem.genesisconductor.io/api/bench/live | jq
+curl https://qmem.genesisconductor.io/api/seismic/status | jq
 ```
 
-Both `seismic.genesisconductor.io` and `qmem.genesisconductor.io` will serve the same Seismic Log API.
+Both `seismic.genesisconductor.io` (if configured) and `qmem.genesisconductor.io` serve the same Seismic Log API.
 
 ## Troubleshooting
 
@@ -123,17 +133,26 @@ ingress:
     service: http://localhost:8003
   - hostname: seismic.genesisconductor.io
     service: http://localhost:8003
+    originRequest:
+      noTLSVerify: true
   - hostname: mcp.genesisconductor.io
     service: http://localhost:8096
   - service: http_status:404
 ```
 
+> **Note**: Both `qmem.genesisconductor.io` and `seismic.genesisconductor.io` point to the same API server (port 8003).
+
 ## Summary
 
-Once the CNAME record is added:
+The Seismic Log API is **already accessible** at:
+✅ `https://qmem.genesisconductor.io` (primary URL, active now)
 
-✅ `https://seismic.genesisconductor.io/api/health` → Health check
-✅ `https://seismic.genesisconductor.io/api/bench/live` → Live metrics
-✅ `https://seismic.genesisconductor.io/api/seismic/status` → S-ToT protocol status
+Once you add the optional CNAME record:
+✅ `https://seismic.genesisconductor.io` (alternate URL, same API)
 
-Ready to share with Extropic/Tesla! 🚀
+**All endpoints work on both URLs:**
+- `/api/health` → Health check
+- `/api/bench/live` → Live metrics
+- `/api/seismic/status` → S-ToT protocol status
+
+Ready to share with Extropic/Tesla using the primary URL! 🚀

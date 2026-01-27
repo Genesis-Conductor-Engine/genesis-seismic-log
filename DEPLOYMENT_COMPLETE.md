@@ -131,7 +131,7 @@ Use the email template in [`DEPLOY_TO_GITHUB.md`](./DEPLOY_TO_GITHUB.md#email-te
 
 **Key Links to Share**:
 - Live Demo: `https://qmem.genesisconductor.io/api/bench/live` (active now)
-- GitHub: `https://github.com/YOUR_USERNAME/genesis-seismic-log` (after push)
+- GitHub: `https://github.com/Genesis-Conductor-Engine/genesis-seismic-log`
 - S-ToT Protocol: `https://qmem.genesisconductor.io/api/seismic/status`
 
 ---
@@ -192,7 +192,7 @@ This deployment is **production-ready** for sharing with technical recruiters, A
 When sharing with Extropic/Tesla, include:
 
 **Live Demo**: https://qmem.genesisconductor.io/api/bench/live
-**GitHub**: https://github.com/YOUR_USERNAME/genesis-seismic-log
+**GitHub**: https://github.com/Genesis-Conductor-Engine/genesis-seismic-log
 **System**: GTX 1650 (Diamond Vault)
 **Protocol**: S-ToT (Seismic Tree-of-Thoughts)
 **Energy**: 0.042 J/op (6.9% of Landauer limit @ 300K)

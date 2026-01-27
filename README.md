@@ -2,9 +2,9 @@
 
 **Topological Truth Verification for Thermodynamic AI Models**
 
-[![Status: Operational](https://img.shields.io/badge/status-operational-green.svg)](https://seismic.genesisconductor.io)
-[![Protocol: S-ToT](https://img.shields.io/badge/protocol-S--ToT-blue.svg)](#protocol)
-[![Energy Efficiency: 2380x](https://img.shields.io/badge/efficiency-2380x-brightgreen.svg)](#metrics)
+[![Status: Operational](https://img.shields.io/badge/status-operational-green.svg)](https://qmem.genesisconductor.io)
+[![Protocol: S-ToT](https://img.shields.io/badge/protocol-S--ToT-blue.svg)](#s-tot-protocol)
+[![Energy Efficiency: 2380x](https://img.shields.io/badge/efficiency-2380x-brightgreen.svg)](#performance-metrics)
 
 ## Overview
 
@@ -18,7 +18,7 @@ This system demonstrates:
 
 ## Live Deployment
 
-🌐 **Public API Endpoint**: [https://seismic.genesisconductor.io](https://seismic.genesisconductor.io)
+🌐 **Public API Endpoint**: [https://qmem.genesisconductor.io](https://qmem.genesisconductor.io)
 
 ### API Endpoints
 
@@ -33,13 +33,13 @@ This system demonstrates:
 
 ```bash
 # Health check
-curl https://seismic.genesisconductor.io/api/health | jq
+curl https://qmem.genesisconductor.io/api/health | jq
 
 # Live benchmarking metrics
-curl https://seismic.genesisconductor.io/api/bench/live | jq
+curl https://qmem.genesisconductor.io/api/bench/live | jq
 
 # Seismic protocol status
-curl https://seismic.genesisconductor.io/api/seismic/status | jq
+curl https://qmem.genesisconductor.io/api/seismic/status | jq
 ```
 
 ## Performance Metrics
@@ -111,7 +111,7 @@ See [`thrml_seismic_bridge.py`](./thrml_seismic_bridge.py) for JAX-accelerated i
 ```
 ┌──────────────────────────────────────────────────────┐
 │  PUBLIC INTERNET                                     │
-│  └─ https://seismic.genesisconductor.io             │
+│  └─ https://qmem.genesisconductor.io                │
 └────────────────┬─────────────────────────────────────┘
                  │
                  ▼
@@ -264,7 +264,7 @@ else:
 - **Algorithm**: Ed25519 (Curve25519 + SHA-512)
 - **Implementation**: C library with zero-copy shared memory
 - **Verification**: Deterministic signature over benchmark checksums
-- **Library**: `libgroundtruth.so` (see [genesis-q-mem](../genesis-q-mem))
+- **Library**: `libgroundtruth.so` (part of Genesis Q-Mem system)
 
 ### Landauer Limit Analysis
 
@@ -292,7 +292,7 @@ If you use Genesis Seismic Log in your research, please cite:
 
 ## Contact
 
-- **Live Demo**: [https://seismic.genesisconductor.io](https://seismic.genesisconductor.io)
+- **Live Demo**: [https://qmem.genesisconductor.io](https://qmem.genesisconductor.io)
 - **GitHub**: [Genesis-Conductor-Engine/genesis-seismic-log](https://github.com/Genesis-Conductor-Engine/genesis-seismic-log)
 - **Project**: Genesis Conductor v2.0
 

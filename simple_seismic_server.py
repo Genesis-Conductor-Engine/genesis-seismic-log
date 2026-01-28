@@ -8,6 +8,20 @@ from http.server import HTTPServer, BaseHTTPRequestHandler
 import json
 from datetime import datetime
 import time
+import threading
+import queue
+
+# Async logging setup
+log_queue = queue.Queue()
+
+def log_worker():
+    while True:
+        msg = log_queue.get()
+        print(msg)
+        log_queue.task_done()
+
+# Start logger thread
+threading.Thread(target=log_worker, daemon=True).start()
 
 # System metrics
 SYSTEM_METRICS = {
@@ -116,7 +130,7 @@ class SeismicHandler(BaseHTTPRequestHandler):
 
     def log_message(self, format, *args):
         """Override to customize logging"""
-        print(f"[{datetime.now().isoformat()}] {format % args}")
+        log_queue.put(f"[{datetime.now().isoformat()}] {format % args}")
 
 if __name__ == "__main__":
     PORT = 8003

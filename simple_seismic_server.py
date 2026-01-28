@@ -4,7 +4,7 @@ Simple Seismic Log HTTP Server
 Uses Python's built-in http.server module
 """
 
-from http.server import HTTPServer, BaseHTTPRequestHandler
+from http.server import HTTPServer, BaseHTTPRequestHandler, ThreadingHTTPServer
 import json
 from datetime import datetime
 import time
@@ -127,7 +127,7 @@ if __name__ == "__main__":
     print(f"Metrics: {SYSTEM_METRICS}")
     print("=" * 60)
 
-    server = HTTPServer(('0.0.0.0', PORT), SeismicHandler)
+    server = ThreadingHTTPServer(('0.0.0.0', PORT), SeismicHandler)
     try:
         server.serve_forever()
     except KeyboardInterrupt:

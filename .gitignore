@@ -40,3 +40,6 @@ credentials.json
 *.tmp
 tmp/
 temp/
+
+# Internal Audit
+_private/

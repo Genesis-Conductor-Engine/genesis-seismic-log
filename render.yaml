@@ -3,7 +3,7 @@ services:
     name: seismic-log
     runtime: python
     buildCommand: pip install -r requirements.txt
-    startCommand: uvicorn seismic_api:app --host 0.0.0.0 --port $PORT
+    startCommand: gunicorn -k uvicorn.workers.UvicornWorker seismic_api:app --bind 0.0.0.0:$PORT
     envVars:
       - key: PORT
         value: 10000

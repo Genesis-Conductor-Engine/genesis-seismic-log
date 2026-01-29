@@ -9,12 +9,14 @@ import time
 import json
 from datetime import datetime
 from fastapi import FastAPI
+from fastapi.responses import ORJSONResponse
 import uvicorn
 
 app = FastAPI(
     title="Genesis Seismic Log API",
     description="Q-Mem benchmarking with S-ToT Seismic Stress protocol",
-    version="1.0.0"
+    version="1.0.0",
+    default_response_class=ORJSONResponse
 )
 
 # System metrics (from Diamond Vault verified logs)

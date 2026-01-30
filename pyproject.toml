@@ -10,10 +10,9 @@ readme = "README.md"
 authors = [
   { name = "Genesis Conductor Engine", email = "genesis@example.com" },
 ]
-license = { file = "LICENSE" }
+license = "MIT"
 classifiers = [
     "Programming Language :: Python :: 3",
-    "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
     "Topic :: Scientific/Engineering :: Artificial Intelligence",
 ]

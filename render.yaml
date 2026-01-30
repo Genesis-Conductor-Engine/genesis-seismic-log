@@ -3,7 +3,4 @@ services:
     name: genesis-seismic-log
     runtime: python
     buildCommand: pip install -r requirements.txt
-    startCommand: python3 simple_seismic_server.py
-    envVars:
-      - key: PORT
-        value: 8003
+    startCommand: python3 -u simple_seismic_server.py

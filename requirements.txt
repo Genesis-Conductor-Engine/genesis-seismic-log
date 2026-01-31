@@ -1,0 +1,2 @@
+# Minimal requirements.txt for Render deployment
+# simple_seismic_server.py relies on stdlib only.

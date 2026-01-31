@@ -1,0 +1,6 @@
+services:
+  - type: web
+    name: genesis-seismic-log
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: python3 -u simple_seismic_server.py

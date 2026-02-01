@@ -1,0 +1,2 @@
+run = 'python main.py'
+modules = ['python-3.11', 'extropic-sdk-beta', 'google-cloud-aiplatform']

@@ -1,5 +1,7 @@
 # Genesis Seismic Log
 
+> **Note:** CI/CD workflows (GitHub Actions) have been temporarily disabled due to repository constraints.
+
 ```
 ╔══════════════════════════════════════════════════════════════════╗
 ║  🌊 SEISMIC TREE-OF-THOUGHTS (S-ToT) PROTOCOL                   ║

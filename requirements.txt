@@ -1,4 +1,3 @@
 fastapi
 uvicorn
 google-cloud-aiplatform
-extropic-sdk

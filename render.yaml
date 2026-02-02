@@ -1,0 +1,9 @@
+services:
+  - type: web
+    name: genesis-seismic-log
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn seismic_api:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: PORT
+        value: 8003

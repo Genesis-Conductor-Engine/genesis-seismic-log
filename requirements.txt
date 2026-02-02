@@ -1,0 +1,6 @@
+fastapi==0.109.2
+uvicorn==0.27.1
+jax==0.4.23
+jaxlib==0.4.23
+pydantic==2.6.1
+requests==2.31.0

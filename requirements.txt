@@ -1,0 +1,6 @@
+fastapi
+uvicorn
+jax
+jaxlib
+pydantic
+requests

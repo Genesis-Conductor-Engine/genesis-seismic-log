@@ -1,4 +1,3 @@
 fastapi
 uvicorn
-jax[cpu]
 requests

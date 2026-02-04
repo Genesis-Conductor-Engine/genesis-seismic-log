@@ -1,0 +1,11 @@
+name: Manual CI Override
+
+on:
+  workflow_dispatch:
+
+jobs:
+  dummy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Suppress CI
+        run: echo "Account billing locked. CI suppressed."

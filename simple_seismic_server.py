@@ -22,6 +22,25 @@ SYSTEM_METRICS = {
     "crystallization_status": "CRYSTALLINE"
 }
 
+STATIC_PERCENTILES = {
+    "p50": SYSTEM_METRICS["latency_p50_ms"],
+    "p95": SYSTEM_METRICS["latency_p95_ms"],
+    "p99": SYSTEM_METRICS["latency_p99_ms"],
+    "p999": SYSTEM_METRICS["latency_p999_ms"]
+}
+
+STATIC_ENERGY_EFFICIENCY = {
+    "joules_per_op": SYSTEM_METRICS["energy_per_op_joules"],
+    "comparison_cloud_joules_per_op": 100.0,
+    "efficiency_gain": "2380x"
+}
+
+STATIC_VERIFICATION = {
+    "protocol": "S-ToT Seismic Stress",
+    "status": SYSTEM_METRICS["crystallization_status"],
+    "ground_truth": "Ed25519 attestation active"
+}
+
 class SeismicHandler(BaseHTTPRequestHandler):
     def do_GET(self):
         if self.path == "/":
@@ -52,22 +71,9 @@ class SeismicHandler(BaseHTTPRequestHandler):
                 "timestamp": datetime.utcnow().isoformat(),
                 "system": "GTX 1650 (Diamond Vault)",
                 "metrics": SYSTEM_METRICS,
-                "percentiles": {
-                    "p50": SYSTEM_METRICS["latency_p50_ms"],
-                    "p95": SYSTEM_METRICS["latency_p95_ms"],
-                    "p99": SYSTEM_METRICS["latency_p99_ms"],
-                    "p999": SYSTEM_METRICS["latency_p999_ms"]
-                },
-                "energy_efficiency": {
-                    "joules_per_op": SYSTEM_METRICS["energy_per_op_joules"],
-                    "comparison_cloud_joules_per_op": 100.0,
-                    "efficiency_gain": "2380x"
-                },
-                "verification": {
-                    "protocol": "S-ToT Seismic Stress",
-                    "status": SYSTEM_METRICS["crystallization_status"],
-                    "ground_truth": "Ed25519 attestation active"
-                }
+                "percentiles": STATIC_PERCENTILES,
+                "energy_efficiency": STATIC_ENERGY_EFFICIENCY,
+                "verification": STATIC_VERIFICATION
             })
         elif self.path == "/api/seismic/status":
             self.send_json({

@@ -2,8 +2,7 @@ import jax
 import jax.numpy as jnp
 from functools import partial
 
-# Mock import of thrml structure (to be replaced with actual thrml imports)
-# from thrml.models import IsingEBM
+from thrml.models import IsingEBM
 # from thrml.sampling import GibbsSampler
 
 class SeismicWrapper:

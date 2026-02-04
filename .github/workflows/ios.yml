@@ -1,0 +1,8 @@
+name: Dummy iOS
+on:
+  workflow_dispatch:
+jobs:
+  dummy:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Dummy workflow to suppress billing lock failure"

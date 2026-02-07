@@ -2,5 +2,4 @@ fastapi
 uvicorn
 requests
 pydantic
-jax
-jaxlib
+jax[cpu]

@@ -1,0 +1,15 @@
+# This file is intentionally empty or minimal to prevent accidental PyPI uploads
+# caused by a stuck or cached "ghost" workflow configuration.
+# The original 'submit-pypi' job was failing due to billing locks.
+name: Upload Python Package
+
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Manual Trigger Only
+        run: echo "This workflow requires manual dispatch."

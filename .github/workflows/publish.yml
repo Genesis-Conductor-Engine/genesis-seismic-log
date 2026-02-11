@@ -1,7 +1,7 @@
-name: Upload Python Package
+name: Publish
 on: workflow_dispatch
 jobs:
-  submit-pypi:
+  publish:
     runs-on: ubuntu-latest
     steps:
       - run: echo "Manual trigger only"

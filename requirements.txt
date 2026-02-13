@@ -1,1 +1,2 @@
-# Only standard library required for simple_seismic_server.py
+wheel
+setuptools

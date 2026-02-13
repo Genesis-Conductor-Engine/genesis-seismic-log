@@ -1,0 +1,1 @@
+# No external dependencies for simple_seismic_server.py

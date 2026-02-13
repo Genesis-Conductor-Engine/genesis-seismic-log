@@ -8,7 +8,6 @@ from http.server import HTTPServer, BaseHTTPRequestHandler, ThreadingHTTPServer
 import json
 from datetime import datetime
 import time
-import os
 
 # System metrics
 SYSTEM_METRICS = {

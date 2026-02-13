@@ -23,91 +23,127 @@ SYSTEM_METRICS = {
 }
 
 class SeismicHandler(BaseHTTPRequestHandler):
+    # Pre-compute static JSON responses to avoid repeated serialization
+    # 1. Root Endpoint
+    _ROOT_JSON = json.dumps({
+        "service": "Genesis Seismic Log",
+        "version": "1.0.0",
+        "status": "operational",
+        "protocol": "S-ToT (Seismic Tree-of-Thoughts)",
+        "endpoints": {
+            "live": "/api/bench/live",
+            "health": "/api/health",
+            "seismic": "/api/seismic/status"
+        }
+    }, separators=(',', ':')).encode()
+
+    # 2. Health Endpoint Template
+    _HEALTH_STATIC_SERVICES = json.dumps({
+        "seismic_wrapper": "active",
+        "qmem_bridge": "active",
+        "crystallization_verifier": "active"
+    }, separators=(',', ':'))
+    # Template expects: (timestamp_bytes, uptime_int)
+    _HEALTH_TEMPLATE = (
+        '{"status":"healthy","timestamp":"%b","uptime_seconds":%d,"services":' +
+        _HEALTH_STATIC_SERVICES + '}'
+    ).encode()
+
+    # 3. Bench Endpoint Template
+    # We construct the static part once using SYSTEM_METRICS
+    _BENCH_STATIC_BODY = json.dumps({
+        "system": "GTX 1650 (Diamond Vault)",
+        "metrics": SYSTEM_METRICS,
+        "percentiles": {
+            "p50": SYSTEM_METRICS["latency_p50_ms"],
+            "p95": SYSTEM_METRICS["latency_p95_ms"],
+            "p99": SYSTEM_METRICS["latency_p99_ms"],
+            "p999": SYSTEM_METRICS["latency_p999_ms"]
+        },
+        "energy_efficiency": {
+            "joules_per_op": SYSTEM_METRICS["energy_per_op_joules"],
+            "comparison_cloud_joules_per_op": 100.0,
+            "efficiency_gain": "2380x"
+        },
+        "verification": {
+            "protocol": "S-ToT Seismic Stress",
+            "status": SYSTEM_METRICS["crystallization_status"],
+            "ground_truth": "Ed25519 attestation active"
+        }
+    }, separators=(',', ':'))
+    # Remove the leading '{' to allow prepending timestamp
+    _BENCH_TEMPLATE = (
+        '{"timestamp":"%b",' + _BENCH_STATIC_BODY[1:]
+    ).encode()
+
+    # 4. Seismic Status Endpoint Template
+    _SEISMIC_STATIC_BODY = json.dumps({
+        "protocol": "Seismic Tree-of-Thoughts (S-ToT)",
+        "phases": {
+            "quantum_branching": {
+                "status": "complete",
+                "branches_generated": 3,
+                "orthogonality_score": 0.94
+            },
+            "seismography": {
+                "status": "complete",
+                "stress_factor": 0.1,
+                "perturbations_applied": 1000,
+                "shake_intensity": "thermal_langevin"
+            },
+            "crystallization": {
+                "status": "CRYSTALLINE",
+                "threshold": 1e-4,
+                "measured_divergence": 3.2e-5,
+                "invariance_score": 0.998
+            },
+            "cold_snap": {
+                "status": "complete",
+                "branches_shattered": 0,
+                "branches_crystalline": 3,
+                "synthesis": "unanimous_convergence"
+            }
+        },
+        "landauer_limit": {
+            "measured_joules_per_op": 0.042,
+            "theoretical_minimum": 0.0029,
+            "efficiency_percentage": 6.9
+        }
+    }, separators=(',', ':'))
+    _SEISMIC_TEMPLATE = (
+        '{"timestamp":"%b",' + _SEISMIC_STATIC_BODY[1:]
+    ).encode()
+
     def do_GET(self):
         if self.path == "/":
-            self.send_json({
-                "service": "Genesis Seismic Log",
-                "version": "1.0.0",
-                "status": "operational",
-                "protocol": "S-ToT (Seismic Tree-of-Thoughts)",
-                "endpoints": {
-                    "live": "/api/bench/live",
-                    "health": "/api/health",
-                    "seismic": "/api/seismic/status"
-                }
-            })
+            self.send_precomputed_json(self._ROOT_JSON)
         elif self.path == "/api/health":
-            self.send_json({
-                "status": "healthy",
-                "timestamp": datetime.utcnow().isoformat(),
-                "uptime_seconds": int(time.time()),
-                "services": {
-                    "seismic_wrapper": "active",
-                    "qmem_bridge": "active",
-                    "crystallization_verifier": "active"
-                }
-            })
+            # Use timestamp bytes for template
+            ts_bytes = datetime.utcnow().isoformat().encode()
+            uptime = int(time.time())
+            response = self._HEALTH_TEMPLATE % (ts_bytes, uptime)
+            self.send_precomputed_json(response)
         elif self.path == "/api/bench/live":
-            self.send_json({
-                "timestamp": datetime.utcnow().isoformat(),
-                "system": "GTX 1650 (Diamond Vault)",
-                "metrics": SYSTEM_METRICS,
-                "percentiles": {
-                    "p50": SYSTEM_METRICS["latency_p50_ms"],
-                    "p95": SYSTEM_METRICS["latency_p95_ms"],
-                    "p99": SYSTEM_METRICS["latency_p99_ms"],
-                    "p999": SYSTEM_METRICS["latency_p999_ms"]
-                },
-                "energy_efficiency": {
-                    "joules_per_op": SYSTEM_METRICS["energy_per_op_joules"],
-                    "comparison_cloud_joules_per_op": 100.0,
-                    "efficiency_gain": "2380x"
-                },
-                "verification": {
-                    "protocol": "S-ToT Seismic Stress",
-                    "status": SYSTEM_METRICS["crystallization_status"],
-                    "ground_truth": "Ed25519 attestation active"
-                }
-            })
+            ts_bytes = datetime.utcnow().isoformat().encode()
+            response = self._BENCH_TEMPLATE % ts_bytes
+            self.send_precomputed_json(response)
         elif self.path == "/api/seismic/status":
-            self.send_json({
-                "timestamp": datetime.utcnow().isoformat(),
-                "protocol": "Seismic Tree-of-Thoughts (S-ToT)",
-                "phases": {
-                    "quantum_branching": {
-                        "status": "complete",
-                        "branches_generated": 3,
-                        "orthogonality_score": 0.94
-                    },
-                    "seismography": {
-                        "status": "complete",
-                        "stress_factor": 0.1,
-                        "perturbations_applied": 1000,
-                        "shake_intensity": "thermal_langevin"
-                    },
-                    "crystallization": {
-                        "status": "CRYSTALLINE",
-                        "threshold": 1e-4,
-                        "measured_divergence": 3.2e-5,
-                        "invariance_score": 0.998
-                    },
-                    "cold_snap": {
-                        "status": "complete",
-                        "branches_shattered": 0,
-                        "branches_crystalline": 3,
-                        "synthesis": "unanimous_convergence"
-                    }
-                },
-                "landauer_limit": {
-                    "measured_joules_per_op": 0.042,
-                    "theoretical_minimum": 0.0029,
-                    "efficiency_percentage": 6.9
-                }
-            })
+            ts_bytes = datetime.utcnow().isoformat().encode()
+            response = self._SEISMIC_TEMPLATE % ts_bytes
+            self.send_precomputed_json(response)
         else:
             self.send_error(404)
 
+    def send_precomputed_json(self, data_bytes):
+        """Send pre-serialized JSON bytes directly"""
+        self.send_response(200)
+        self.send_header('Content-Type', 'application/json')
+        self.send_header('Access-Control-Allow-Origin', '*')
+        self.end_headers()
+        self.wfile.write(data_bytes)
+
     def send_json(self, data):
+        """Legacy method for non-optimized paths"""
         self.send_response(200)
         self.send_header('Content-Type', 'application/json')
         self.send_header('Access-Control-Allow-Origin', '*')

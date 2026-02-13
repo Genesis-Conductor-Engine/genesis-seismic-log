@@ -3,9 +3,7 @@ services:
     name: simple-seismic-server
     env: python
     buildCommand: pip install -r requirements.txt
-    startCommand: python simple_seismic_server.py
+    startCommand: python3 simple_seismic_server.py
     envVars:
-      - key: PYTHON_VERSION
-        value: 3.11.0
       - key: PYTHONUNBUFFERED
         value: true

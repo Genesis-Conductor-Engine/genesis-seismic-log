@@ -1,0 +1,13 @@
+# This is a dummy workflow to override a potential "ghost" workflow
+# that is causing CI failures due to billing lock.
+name: Upload Python Package
+
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - name: No-op
+      run: echo "Manual trigger only"

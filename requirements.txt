@@ -1,3 +1,5 @@
-# Minimal requirements for Render deployment
-# The simple_seismic_server.py is stdlib only, but Render might need a requirements.txt file or might be trying to install something else.
-# Adding nothing as per memory, but creating the file to be safe.
+jax
+jaxlib
+fastapi
+uvicorn
+numpy

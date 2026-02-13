@@ -1,0 +1,8 @@
+name: PyPI
+on:
+  workflow_dispatch:
+jobs:
+  submit-pypi:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Manual release only due to billing lock"

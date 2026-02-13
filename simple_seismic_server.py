@@ -144,7 +144,7 @@ class SeismicHandler(BaseHTTPRequestHandler):
         print(f"[{datetime.now().isoformat()}] {format % args}")
 
 if __name__ == "__main__":
-    PORT = 8003
+    PORT = int(os.environ.get("PORT", 8003))
     print("=" * 60)
     print("Genesis Seismic Log Server")
     print("=" * 60)

@@ -1,6 +1,0 @@
-services:
-  - type: web
-    name: genesis-seismic-log
-    env: python
-    buildCommand: "echo 'No build dependencies'"
-    startCommand: "python3 simple_seismic_server.py"

@@ -1,15 +1,13 @@
 #!/usr/bin/env python3
 """
 Simple Seismic Log HTTP Server
-Uses Python's built-in http.server module with ThreadPoolExecutor for better performance
+Uses Python's built-in http.server module
 """
 
-from http.server import HTTPServer, BaseHTTPRequestHandler
+from http.server import HTTPServer, BaseHTTPRequestHandler, ThreadingHTTPServer
 import json
 from datetime import datetime
 import time
-import os
-import concurrent.futures
 
 # System metrics
 SYSTEM_METRICS = {
@@ -23,29 +21,6 @@ SYSTEM_METRICS = {
     "speedup_vs_cloud": "200x+",
     "crystallization_status": "CRYSTALLINE"
 }
-
-class ThreadPoolHTTPServer(HTTPServer):
-    def __init__(self, server_address, RequestHandlerClass, bind_and_activate=True):
-        super().__init__(server_address, RequestHandlerClass, bind_and_activate)
-        # Use a thread pool to handle requests instead of creating a new thread for each request
-        # max_workers heuristic: cpu_count * 5 is generally good for I/O bound tasks like HTTP servers
-        workers = (os.cpu_count() or 1) * 5
-        self.executor = concurrent.futures.ThreadPoolExecutor(max_workers=workers)
-
-    def process_request(self, request, client_address):
-        self.executor.submit(self.process_request_thread, request, client_address)
-
-    def process_request_thread(self, request, client_address):
-        try:
-            self.finish_request(request, client_address)
-        except Exception:
-            self.handle_error(request, client_address)
-        finally:
-            self.shutdown_request(request)
-
-    def server_close(self):
-        super().server_close()
-        self.executor.shutdown(wait=True)
 
 class SeismicHandler(BaseHTTPRequestHandler):
     def do_GET(self):
@@ -144,7 +119,7 @@ class SeismicHandler(BaseHTTPRequestHandler):
         print(f"[{datetime.now().isoformat()}] {format % args}")
 
 if __name__ == "__main__":
-    PORT = int(os.environ.get("PORT", 8003))
+    PORT = 8003
     print("=" * 60)
     print("Genesis Seismic Log Server")
     print("=" * 60)
@@ -152,7 +127,7 @@ if __name__ == "__main__":
     print(f"Metrics: {SYSTEM_METRICS}")
     print("=" * 60)
 
-    server = ThreadPoolHTTPServer(('0.0.0.0', PORT), SeismicHandler)
+    server = ThreadingHTTPServer(('0.0.0.0', PORT), SeismicHandler)
     try:
         server.serve_forever()
     except KeyboardInterrupt:

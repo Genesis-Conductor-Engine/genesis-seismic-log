@@ -6,11 +6,13 @@ from functools import partial
 # from thrml.models import IsingEBM
 # from thrml.sampling import GibbsSampler
 
+
 class SeismicWrapper:
     """
     Genesis Conductor wrapper for Thermodynamic Energy Based Models (EBMs).
     Implements the S-ToT 'Seismic Stress' protocol on top of JAX priors.
     """
+
     def __init__(self, model, stress_factor=0.1, crystallization_threshold=1e-4):
         self.model = model
         self.stress = stress_factor
@@ -41,6 +43,7 @@ class SeismicWrapper:
         is_crystalline = divergence < self.threshold
         return is_crystalline, divergence
 
+    @partial(jax.jit, static_argnums=(0, 2))
     def run_protocol(self, key, sampler, current_state):
         """
         Full S-ToT Loop:
@@ -48,6 +51,11 @@ class SeismicWrapper:
         2. Apply Seismic Shock
         3. Re-Anneal (allow physics to settle)
         4. Verify Invariance
+
+        Args:
+            key: JAX PRNGKey
+            sampler: Object implementing step(key, state) -> new_state. Must be static/hashable or a PyTree.
+            current_state: JAX array representing model state
         """
         shake_key, anneal_key = jax.random.split(key)
 
@@ -55,18 +63,20 @@ class SeismicWrapper:
         shaken_state = self.apply_seismic_shock(shake_key, current_state)
 
         # 2. Re-Anneal (Using thrml's native sampler logic)
-        # settled_state = sampler.step(anneal_key, shaken_state)
-        # (Mocking the re-anneal step for the prototype)
-        settled_state = shaken_state * 0.99 # Simulated settling
+        settled_state = sampler.step(anneal_key, shaken_state)
+        # (Mocking removed - replaced with actual sampler step)
+        # settled_state = shaken_state * 0.99 # Simulated settling
 
         # 3. Verify
         invariant, score = self.verify_crystallization(current_state, settled_state)
 
         return {
-            "status": jnp.where(invariant, 1, 0), # 1 = CRYSTALLINE, 0 = SHATTERED
+            "status": jnp.where(invariant, 1, 0),  # 1 = CRYSTALLINE, 0 = SHATTERED
             "divergence": score,
-            "energy_delta": self.model.energy(settled_state) - self.model.energy(current_state)
+            "energy_delta": self.model.energy(settled_state)
+            - self.model.energy(current_state),
         }
+
 
 # Metric Verification:
 # Targeting Landauer efficiency of 0.042J/op as verified in Diamond Vault logs.

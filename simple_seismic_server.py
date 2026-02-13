@@ -38,19 +38,18 @@ class SeismicHandler(BaseHTTPRequestHandler):
     }, separators=(',', ':')).encode()
 
     # 2. Health Endpoint Template
-    _HEALTH_STATIC_SERVICES = json.dumps({
+    # We will use byte concatenation for safety:
+    # b'{"status":"healthy","timestamp":"' + ts_bytes + b'","uptime_seconds":' + str(uptime).encode() + b',"services":' + _HEALTH_STATIC_SERVICES + b'}'
+    _HEALTH_PRE = b'{"status":"healthy","timestamp":"'
+    _HEALTH_MID = b'","uptime_seconds":'
+    _HEALTH_POST = b',"services":' + json.dumps({
         "seismic_wrapper": "active",
         "qmem_bridge": "active",
         "crystallization_verifier": "active"
-    }, separators=(',', ':'))
-    # Template expects: (timestamp_bytes, uptime_int)
-    _HEALTH_TEMPLATE = (
-        '{"status":"healthy","timestamp":"%b","uptime_seconds":%d,"services":' +
-        _HEALTH_STATIC_SERVICES + '}'
-    ).encode()
+    }, separators=(',', ':')).encode() + b'}'
 
     # 3. Bench Endpoint Template
-    # We construct the static part once using SYSTEM_METRICS
+    # b'{"timestamp":"' + ts_bytes + b'",' + _BENCH_STATIC_BODY_NO_BRACE
     _BENCH_STATIC_BODY = json.dumps({
         "system": "GTX 1650 (Diamond Vault)",
         "metrics": SYSTEM_METRICS,
@@ -70,13 +69,13 @@ class SeismicHandler(BaseHTTPRequestHandler):
             "status": SYSTEM_METRICS["crystallization_status"],
             "ground_truth": "Ed25519 attestation active"
         }
-    }, separators=(',', ':'))
-    # Remove the leading '{' to allow prepending timestamp
-    _BENCH_TEMPLATE = (
-        '{"timestamp":"%b",' + _BENCH_STATIC_BODY[1:]
-    ).encode()
+    }, separators=(',', ':')).encode()
+    # Remove leading '{'
+    _BENCH_POST = b'",' + _BENCH_STATIC_BODY[1:]
+    _BENCH_PRE = b'{"timestamp":"'
 
     # 4. Seismic Status Endpoint Template
+    # b'{"timestamp":"' + ts_bytes + b'",' + _SEISMIC_STATIC_BODY_NO_BRACE
     _SEISMIC_STATIC_BODY = json.dumps({
         "protocol": "Seismic Tree-of-Thoughts (S-ToT)",
         "phases": {
@@ -109,27 +108,27 @@ class SeismicHandler(BaseHTTPRequestHandler):
             "theoretical_minimum": 0.0029,
             "efficiency_percentage": 6.9
         }
-    }, separators=(',', ':'))
-    _SEISMIC_TEMPLATE = (
-        '{"timestamp":"%b",' + _SEISMIC_STATIC_BODY[1:]
-    ).encode()
+    }, separators=(',', ':')).encode()
+    # Remove leading '{'
+    _SEISMIC_POST = b'",' + _SEISMIC_STATIC_BODY[1:]
+    _SEISMIC_PRE = b'{"timestamp":"'
 
     def do_GET(self):
         if self.path == "/":
             self.send_precomputed_json(self._ROOT_JSON)
         elif self.path == "/api/health":
-            # Use timestamp bytes for template
             ts_bytes = datetime.utcnow().isoformat().encode()
-            uptime = int(time.time())
-            response = self._HEALTH_TEMPLATE % (ts_bytes, uptime)
+            uptime_bytes = str(int(time.time())).encode()
+            # Concatenation is safer than % formatting if static parts contain %
+            response = self._HEALTH_PRE + ts_bytes + self._HEALTH_MID + uptime_bytes + self._HEALTH_POST
             self.send_precomputed_json(response)
         elif self.path == "/api/bench/live":
             ts_bytes = datetime.utcnow().isoformat().encode()
-            response = self._BENCH_TEMPLATE % ts_bytes
+            response = self._BENCH_PRE + ts_bytes + self._BENCH_POST
             self.send_precomputed_json(response)
         elif self.path == "/api/seismic/status":
             ts_bytes = datetime.utcnow().isoformat().encode()
-            response = self._SEISMIC_TEMPLATE % ts_bytes
+            response = self._SEISMIC_PRE + ts_bytes + self._SEISMIC_POST
             self.send_precomputed_json(response)
         else:
             self.send_error(404)

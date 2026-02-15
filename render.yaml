@@ -6,4 +6,4 @@ services:
     startCommand: python3 simple_seismic_server.py
     envVars:
       - key: PYTHONUNBUFFERED
-        value: true
+        value: "true"

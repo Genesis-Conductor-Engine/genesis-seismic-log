@@ -6,6 +6,7 @@ Uses Python's built-in http.server module
 
 from http.server import HTTPServer, BaseHTTPRequestHandler, ThreadingHTTPServer
 import json
+import os
 from datetime import datetime
 import time
 
@@ -120,7 +121,7 @@ class SeismicHandler(BaseHTTPRequestHandler):
         print(f"[{datetime.now().isoformat()}] {format % args}")
 
 if __name__ == "__main__":
-    PORT = 8003
+    PORT = int(os.environ.get("PORT", 8003))
     print("=" * 60)
     print("Genesis Seismic Log Server")
     print("=" * 60)

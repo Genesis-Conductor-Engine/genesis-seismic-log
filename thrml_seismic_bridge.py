@@ -16,7 +16,18 @@ class SeismicWrapper:
         self.stress = stress_factor
         self.threshold = crystallization_threshold
 
-    @partial(jax.jit, static_argnums=(0,))
+    def _tree_flatten(self):
+        children = (self.stress, self.threshold)
+        aux_data = (self.model,)
+        return (children, aux_data)
+
+    @classmethod
+    def _tree_unflatten(cls, aux_data, children):
+        model = aux_data[0]
+        stress, threshold = children
+        return cls(model, stress_factor=stress, crystallization_threshold=threshold)
+
+    @jax.jit
     def apply_seismic_shock(self, key, state):
         """
         Phase 2: Seismography.
@@ -28,7 +39,7 @@ class SeismicWrapper:
         perturbed_state = state + noise
         return perturbed_state
 
-    @partial(jax.jit, static_argnums=(0,))
+    @jax.jit
     def verify_crystallization(self, original_state, re_annealed_state):
         """
         Phase 3: Crystallization.
@@ -67,6 +78,9 @@ class SeismicWrapper:
             "divergence": score,
             "energy_delta": self.model.energy(settled_state) - self.model.energy(current_state)
         }
+
+# Register SeismicWrapper as a JAX Pytree
+jax.tree_util.register_pytree_node(SeismicWrapper, SeismicWrapper._tree_flatten, SeismicWrapper._tree_unflatten)
 
 # Metric Verification:
 # Targeting Landauer efficiency of 0.042J/op as verified in Diamond Vault logs.

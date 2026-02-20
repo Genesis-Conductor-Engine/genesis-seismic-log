@@ -7,6 +7,7 @@ Compatible with Genesis Conductor protocol
 
 import time
 import json
+import os
 from datetime import datetime
 from fastapi import FastAPI
 import uvicorn
@@ -137,6 +138,6 @@ if __name__ == "__main__":
     uvicorn.run(
         app,
         host="0.0.0.0",
-        port=8003,
+        port=int(os.environ.get("PORT", 8003)),
         log_level="info"
     )

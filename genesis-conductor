@@ -1,0 +1,11 @@
+#!/usr/bin/env python3
+import runpy
+import os
+import sys
+
+if __name__ == "__main__":
+    # Ensure current directory is in sys.path
+    sys.path.insert(0, os.getcwd())
+
+    print("Starting Genesis Conductor (wrapping simple_seismic_server.py)...")
+    runpy.run_path("simple_seismic_server.py", run_name="__main__")

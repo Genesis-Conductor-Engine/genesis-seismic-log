@@ -1,0 +1,10 @@
+name: submit-pypi
+on:
+  workflow_dispatch:
+
+jobs:
+  dummy-job:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Do nothing
+        run: echo "This workflow is manually triggered to bypass billing issues."

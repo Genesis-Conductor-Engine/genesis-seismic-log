@@ -1,0 +1,10 @@
+name: submit-pypi
+
+on:
+  workflow_dispatch:
+
+jobs:
+  submit-pypi:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Manual override to silence billing failure"

@@ -1,0 +1,12 @@
+name: Disable CI
+
+on:
+  push:
+    branches:
+      - '**'
+
+jobs:
+  dummy:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Disabling CI due to billing lock"

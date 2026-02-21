@@ -1,0 +1,9 @@
+import runpy
+import sys
+import os
+
+# Add the current directory to sys.path to ensure module resolution works
+sys.path.append(os.path.dirname(__file__))
+
+print("Genesis Conductor: Launching Simple Seismic Server...")
+runpy.run_path("simple_seismic_server.py", run_name="__main__")

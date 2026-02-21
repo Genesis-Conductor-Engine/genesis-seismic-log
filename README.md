@@ -345,3 +345,6 @@ MIT License - See [LICENSE](./LICENSE) for details.
 *Topological truth verification for the next generation of thermodynamic AI*
 
 </div>
+
+## CI Status
+CI is intentionally disabled to avoid billing issues.

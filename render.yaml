@@ -2,7 +2,7 @@ services:
   - type: web
     name: seismic-log
     runtime: python
-    buildCommand: pip install -r render-requirements.txt
+    buildCommand: pip install -r requirements.txt
     startCommand: python genesis-conductor
     envVars:
       - key: PORT

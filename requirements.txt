@@ -1,0 +1,6 @@
+wheel
+setuptools
+jax
+jaxlib
+fastapi
+uvicorn

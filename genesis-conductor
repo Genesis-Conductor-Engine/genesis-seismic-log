@@ -1,0 +1,9 @@
+import runpy
+import os
+import sys
+
+# Ensure current directory is in sys.path
+sys.path.append(os.getcwd())
+
+print("Genesis Conductor: Starting simple_seismic_server.py...")
+runpy.run_path("simple_seismic_server.py", run_name="__main__")

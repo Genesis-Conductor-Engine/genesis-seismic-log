@@ -1,3 +1,9 @@
+#!/usr/bin/env python3
+"""
+Genesis Conductor Shim
+This script is required by the Render deployment configuration as the entry point.
+It imports and runs `simple_seismic_server.py`.
+"""
 import runpy
 import os
 import sys

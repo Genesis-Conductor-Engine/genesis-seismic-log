@@ -1,0 +1,10 @@
+
+import runpy
+import sys
+import os
+
+# Add current directory to path
+sys.path.append(os.getcwd())
+
+# Execute the simple_seismic_server.py script
+runpy.run_module('simple_seismic_server', run_name='__main__')

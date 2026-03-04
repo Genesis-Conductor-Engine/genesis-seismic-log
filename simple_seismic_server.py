@@ -22,36 +22,31 @@ SYSTEM_METRICS = {
     "crystallization_status": "CRYSTALLINE"
 }
 
-STATIC_ROOT_RESPONSE = json.dumps({
-    "service": "Genesis Seismic Log",
-    "version": "1.0.0",
-    "status": "operational",
-    "protocol": "S-ToT (Seismic Tree-of-Thoughts)",
-    "endpoints": {
-        "live": "/api/bench/live",
-        "health": "/api/health",
-        "seismic": "/api/seismic/status"
-    }
-}, separators=(',', ':')).encode()
-
-STATIC_HEALTH_RESPONSE_BASE = {
-    "status": "healthy",
-    "services": {
-        "seismic_wrapper": "active",
-        "qmem_bridge": "active",
-        "crystallization_verifier": "active"
-    }
-}
-
 class SeismicHandler(BaseHTTPRequestHandler):
     def do_GET(self):
         if self.path == "/":
-            self.send_json(STATIC_ROOT_RESPONSE)
+            self.send_json({
+                "service": "Genesis Seismic Log",
+                "version": "1.0.0",
+                "status": "operational",
+                "protocol": "S-ToT (Seismic Tree-of-Thoughts)",
+                "endpoints": {
+                    "live": "/api/bench/live",
+                    "health": "/api/health",
+                    "seismic": "/api/seismic/status"
+                }
+            })
         elif self.path == "/api/health":
-            health_data = STATIC_HEALTH_RESPONSE_BASE.copy()
-            health_data["timestamp"] = datetime.utcnow().isoformat()
-            health_data["uptime_seconds"] = int(time.time())
-            self.send_json(health_data)
+            self.send_json({
+                "status": "healthy",
+                "timestamp": datetime.utcnow().isoformat(),
+                "uptime_seconds": int(time.time()),
+                "services": {
+                    "seismic_wrapper": "active",
+                    "qmem_bridge": "active",
+                    "crystallization_verifier": "active"
+                }
+            })
         elif self.path == "/api/bench/live":
             self.send_json({
                 "timestamp": datetime.utcnow().isoformat(),
@@ -117,10 +112,7 @@ class SeismicHandler(BaseHTTPRequestHandler):
         self.send_header('Content-Type', 'application/json')
         self.send_header('Access-Control-Allow-Origin', '*')
         self.end_headers()
-        if isinstance(data, bytes):
-            self.wfile.write(data)
-        else:
-            self.wfile.write(json.dumps(data, separators=(',', ':')).encode())
+        self.wfile.write(json.dumps(data, separators=(',', ':')).encode())
 
     def log_message(self, format, *args):
         """Override to customize logging"""

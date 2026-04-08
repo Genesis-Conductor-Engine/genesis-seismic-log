@@ -57,33 +57,37 @@ async def health():
         }
     }
 
+# Pre-computed static response for bench_live endpoint
+STATIC_BENCH_RESPONSE = {
+    "system": "GTX 1650 (Diamond Vault)",
+    "metrics": SYSTEM_METRICS,
+    "percentiles": {
+        "p50": SYSTEM_METRICS["latency_p50_ms"],
+        "p95": SYSTEM_METRICS["latency_p95_ms"],
+        "p99": SYSTEM_METRICS["latency_p99_ms"],
+        "p999": SYSTEM_METRICS["latency_p999_ms"]
+    },
+    "energy_efficiency": {
+        "joules_per_op": SYSTEM_METRICS["energy_per_op_joules"],
+        "comparison_cloud_joules_per_op": 100.0,
+        "efficiency_gain": "2380x"
+    },
+    "verification": {
+        "protocol": "S-ToT Seismic Stress",
+        "status": SYSTEM_METRICS["crystallization_status"],
+        "ground_truth": "Ed25519 attestation active"
+    }
+}
+
 @app.get("/api/bench/live")
 async def bench_live():
     """
     Live benchmarking metrics endpoint
     Compatible with Q-Mem Live Bench protocol
     """
-    return {
-        "timestamp": datetime.utcnow().isoformat(),
-        "system": "GTX 1650 (Diamond Vault)",
-        "metrics": SYSTEM_METRICS,
-        "percentiles": {
-            "p50": SYSTEM_METRICS["latency_p50_ms"],
-            "p95": SYSTEM_METRICS["latency_p95_ms"],
-            "p99": SYSTEM_METRICS["latency_p99_ms"],
-            "p999": SYSTEM_METRICS["latency_p999_ms"]
-        },
-        "energy_efficiency": {
-            "joules_per_op": SYSTEM_METRICS["energy_per_op_joules"],
-            "comparison_cloud_joules_per_op": 100.0,
-            "efficiency_gain": "2380x"
-        },
-        "verification": {
-            "protocol": "S-ToT Seismic Stress",
-            "status": SYSTEM_METRICS["crystallization_status"],
-            "ground_truth": "Ed25519 attestation active"
-        }
-    }
+    response = STATIC_BENCH_RESPONSE.copy()
+    response["timestamp"] = datetime.utcnow().isoformat()
+    return response
 
 @app.get("/api/seismic/status")
 async def seismic_status():

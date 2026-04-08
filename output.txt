@@ -1,0 +1,4 @@
+Traceback (most recent call last):
+  File "/app/reproduce_jit_issue.py", line 1, in <module>
+    import jax
+ModuleNotFoundError: No module named 'jax'

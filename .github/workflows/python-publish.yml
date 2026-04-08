@@ -1,0 +1,13 @@
+name: Upload Python Package
+
+on:
+  workflow_dispatch:
+  # release:
+  #   types: [published]
+
+jobs:
+  submit-pypi:
+    name: Submit to PyPI
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Manual release only due to billing lock"

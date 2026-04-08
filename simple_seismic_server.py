@@ -8,6 +8,7 @@ from http.server import HTTPServer, BaseHTTPRequestHandler, ThreadingHTTPServer
 import json
 from datetime import datetime
 import time
+import os
 
 # System metrics
 SYSTEM_METRICS = {
@@ -112,14 +113,14 @@ class SeismicHandler(BaseHTTPRequestHandler):
         self.send_header('Content-Type', 'application/json')
         self.send_header('Access-Control-Allow-Origin', '*')
         self.end_headers()
-        self.wfile.write(json.dumps(data, separators=(',', ':')).encode())
+        self.wfile.write(json.dumps(data, separators=(',', ':'), check_circular=False).encode())
 
     def log_message(self, format, *args):
         """Override to customize logging"""
         print(f"[{datetime.now().isoformat()}] {format % args}")
 
 if __name__ == "__main__":
-    PORT = 8003
+    PORT = int(os.environ.get('PORT', 8003))
     print("=" * 60)
     print("Genesis Seismic Log Server")
     print("=" * 60)

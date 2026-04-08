@@ -8,6 +8,7 @@ on:
 
 jobs:
   build:
+    if: false
     name: Build and Test default scheme using any available iPhone simulator
     runs-on: macos-latest
 

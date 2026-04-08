@@ -10,6 +10,7 @@ import json
 from datetime import datetime
 from fastapi import FastAPI
 import uvicorn
+import os
 
 app = FastAPI(
     title="Genesis Seismic Log API",
@@ -127,16 +128,17 @@ async def seismic_status():
     }
 
 if __name__ == "__main__":
+    PORT = int(os.environ.get("PORT", 8003))
     print("=" * 50)
     print("Genesis Seismic Log API Server")
     print("=" * 50)
-    print(f"Starting on port 8003...")
+    print(f"Starting on port {PORT}...")
     print(f"Metrics: {SYSTEM_METRICS}")
     print("=" * 50)
 
     uvicorn.run(
         app,
         host="0.0.0.0",
-        port=8003,
+        port=PORT,
         log_level="info"
     )

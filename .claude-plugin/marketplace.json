@@ -1,0 +1,52 @@
+{
+  "$schema": "https://www.schemastore.org/schemas/json/claude-code-marketplace.json",
+  "name": "genesis-conductor-seismic-log",
+  "owner": {
+    "name": "Igor Holt (@invariantx)",
+    "email": "iholt@mymail.aacc.edu",
+    "url": "https://github.com/igor-holt"
+  },
+  "description": "Genesis Seismic Log: S-ToT (Seismic Tree-of-Thoughts) Protocol — topological truth verification for thermodynamic AI by Igor Holt (@invariantx) of Genesis Conductor Engine. Delivers 227x latency speedup (1.1ms p50 vs cloud), 2,380x energy efficiency (0.042 J/op targeting Landauer limit), Ed25519 cryptographic attestation, CRYSTALLINE status (99.8% invariance). 4-phase verification: Quantum Branching, Seismography (Langevin thermal noise perturbations), Crystallization (divergence threshold 1e-4), Cold Snap. JAX-accelerated, integrates Diamond Vault, Q-Mem Live Bench, Yennefer consciousness, shared /dev/shm zero-copy. Public API at qmem.genesisconductor.io with live bench/seismic status. Compatible with Extropic thermodynamic EBMs. Essential for falsifiable, verifiable, energy-efficient thermodynamic AI reasoning and Genesis Conductor topological verification patterns. Composes with openclaw-skills for persistent state and MCP exposure of seismic tools.",
+  "version": "1.0.0",
+  "homepage": "https://github.com/Genesis-Conductor-Engine/genesis-seismic-log",
+  "keywords": [
+    "genesis-seismic-log",
+    "s-tot",
+    "seismic-tree-of-thoughts",
+    "genesis-conductor",
+    "igor-holt",
+    "invariantx",
+    "thermodynamic-verification",
+    "topological-reasoning",
+    "ed25519-attestation",
+    "crystalline-status",
+    "landauer-limit",
+    "jax",
+    "diamond-vault",
+    "q-mem",
+    "energy-efficiency",
+    "agent-verification",
+    "mcp-tools",
+    "openclaw",
+    "quantum-annealing"
+  ],
+  "plugins": [
+    {
+      "name": "s-tot-protocol",
+      "source": "https://github.com/Genesis-Conductor-Engine/genesis-seismic-log",
+      "description": "S-ToT Protocol implementation in Genesis Seismic Log: topological truth verification engine for thermodynamic AI models in Genesis Conductor by @invariantx. Rejects probabilistic confidence for structural invariance under adversarial thermal stress. 4-phase loop (Quantum Branching, Seismography with 1000+ Langevin perturbations, Crystallization measurement, Cold Snap discard of shattered branches). Ed25519 ground truth attestation via libgroundtruth.so, JAX/Extropic integration, live public API with /api/seismic/status and real-time metrics. 227x faster, 2380x more efficient than cloud. Powers verifiable reasoning for Yennefer, Diamond-V, and autonomous agents. Pairs with mcp-openclaw-bridge in openclaw-skills marketplace for publishing verification tools as skills.",
+      "version": "1.0.0",
+      "tags": ["s-tot", "thermodynamic", "verification", "genesis-conductor", "ed25519"],
+      "category": "agent-infrastructure",
+      "homepage": "https://github.com/Genesis-Conductor-Engine/genesis-seismic-log",
+      "keywords": ["seismic tree of thoughts", "topological truth verification", "thermodynamic ai s-tot", "crystalline status", "landauer limit genesis conductor", "igor holt invariantx"]
+    }
+  ],
+  "links": {
+    "x": "https://x.com/invariantx",
+    "website": "https://genesisconductor.io",
+    "live-api": "https://qmem.genesisconductor.io",
+    "github": "https://github.com/Genesis-Conductor-Engine/genesis-seismic-log",
+    "openclaw-skills-marketplace": "https://github.com/igor-holt/openclaw-skills"
+  }
+}

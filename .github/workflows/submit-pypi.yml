@@ -1,7 +1,0 @@
-name: Dummy Submit PyPI
-on: [workflow_dispatch]
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - run: echo "Dummy to prevent billing lock errors"

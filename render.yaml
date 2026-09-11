@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: simple-seismic-server
+    env: python
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "python3 simple_seismic_server.py"
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.0
+      - key: PORT
+        value: 8003

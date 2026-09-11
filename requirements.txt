@@ -1,0 +1,7 @@
+fastapi==0.109.2
+uvicorn==0.27.1
+requests==2.31.0
+pydantic==2.6.1
+jax[cpu]==0.4.23
+jaxlib==0.4.23
+# Note: thrml is excluded as it is not available on PyPI

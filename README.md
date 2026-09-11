@@ -16,6 +16,9 @@
 [![Protocol: S-ToT](https://img.shields.io/badge/protocol-S--ToT-blue.svg)](#s-tot-protocol)
 [![Energy Efficiency: 2380x](https://img.shields.io/badge/efficiency-2380x-brightgreen.svg)](#performance-metrics)
 [![Live Demo](https://img.shields.io/badge/live-demo-purple.svg)](https://qmem.genesisconductor.io/api/bench/live)
+[![CI Status: Disabled](https://img.shields.io/badge/CI-disabled-gray.svg)](#)
+
+> **Note:** CI workflows are temporarily disabled due to account billing restrictions.
 
 ## Overview
 

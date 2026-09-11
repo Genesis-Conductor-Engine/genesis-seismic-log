@@ -6,6 +6,31 @@ from functools import partial
 # from thrml.models import IsingEBM
 # from thrml.sampling import GibbsSampler
 
+@jax.jit
+def _apply_seismic_shock(stress, key, state):
+    """
+    Phase 2: Seismography.
+    Perturbs the energy state (Langevin injection) to test stability.
+    """
+    noise_key, sub_key = jax.random.split(key)
+    # Inject thermal noise (The "Shake")
+    noise = jax.random.normal(noise_key, state.shape) * stress
+    perturbed_state = state + noise
+    return perturbed_state
+
+@jax.jit
+def _verify_crystallization(threshold, original_state, re_annealed_state):
+    """
+    Phase 3: Crystallization.
+    Checks if the model returns to the invariant ground truth after shock.
+    """
+    # Calculate Hamming distance or Euclidean divergence depending on state type
+    divergence = jnp.linalg.norm(original_state - re_annealed_state)
+
+    # Boolean invariance check: Did it hold the structure?
+    is_crystalline = divergence < threshold
+    return is_crystalline, divergence
+
 class SeismicWrapper:
     """
     Genesis Conductor wrapper for Thermodynamic Energy Based Models (EBMs).
@@ -16,30 +41,19 @@ class SeismicWrapper:
         self.stress = stress_factor
         self.threshold = crystallization_threshold
 
-    @partial(jax.jit, static_argnums=(0,))
     def apply_seismic_shock(self, key, state):
         """
         Phase 2: Seismography.
         Perturbs the energy state (Langevin injection) to test stability.
         """
-        noise_key, sub_key = jax.random.split(key)
-        # Inject thermal noise (The "Shake")
-        noise = jax.random.normal(noise_key, state.shape) * self.stress
-        perturbed_state = state + noise
-        return perturbed_state
+        return _apply_seismic_shock(self.stress, key, state)
 
-    @partial(jax.jit, static_argnums=(0,))
     def verify_crystallization(self, original_state, re_annealed_state):
         """
         Phase 3: Crystallization.
         Checks if the model returns to the invariant ground truth after shock.
         """
-        # Calculate Hamming distance or Euclidean divergence depending on state type
-        divergence = jnp.linalg.norm(original_state - re_annealed_state)
-
-        # Boolean invariance check: Did it hold the structure?
-        is_crystalline = divergence < self.threshold
-        return is_crystalline, divergence
+        return _verify_crystallization(self.threshold, original_state, re_annealed_state)
 
     def run_protocol(self, key, sampler, current_state):
         """

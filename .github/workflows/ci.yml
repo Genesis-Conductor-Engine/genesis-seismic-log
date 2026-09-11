@@ -1,0 +1,10 @@
+name: Override CI
+
+on:
+  workflow_dispatch:
+
+jobs:
+  override:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Overriding billing lock"

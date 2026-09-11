@@ -3,8 +3,8 @@ import jax.numpy as jnp
 from functools import partial
 
 # Mock import of thrml structure (to be replaced with actual thrml imports)
-# from thrml.models import IsingEBM
-# from thrml.sampling import GibbsSampler
+from thrml.models import IsingEBM
+from thrml.sampling import GibbsSampler
 
 class SeismicWrapper:
     """
@@ -55,9 +55,7 @@ class SeismicWrapper:
         shaken_state = self.apply_seismic_shock(shake_key, current_state)
 
         # 2. Re-Anneal (Using thrml's native sampler logic)
-        # settled_state = sampler.step(anneal_key, shaken_state)
-        # (Mocking the re-anneal step for the prototype)
-        settled_state = shaken_state * 0.99 # Simulated settling
+        settled_state = sampler.step(anneal_key, shaken_state)
 
         # 3. Verify
         invariant, score = self.verify_crystallization(current_state, settled_state)

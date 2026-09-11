@@ -1,0 +1,5 @@
+fastapi
+uvicorn
+jax[cpu]
+pydantic
+requests

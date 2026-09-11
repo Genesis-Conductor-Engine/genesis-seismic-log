@@ -1,11 +1,13 @@
 import jax
 import jax.numpy as jnp
 from functools import partial
+from jax.tree_util import register_pytree_node_class
 
 # Mock import of thrml structure (to be replaced with actual thrml imports)
 # from thrml.models import IsingEBM
 # from thrml.sampling import GibbsSampler
 
+@register_pytree_node_class
 class SeismicWrapper:
     """
     Genesis Conductor wrapper for Thermodynamic Energy Based Models (EBMs).
@@ -16,7 +18,16 @@ class SeismicWrapper:
         self.stress = stress_factor
         self.threshold = crystallization_threshold
 
-    @partial(jax.jit, static_argnums=(0,))
+    def tree_flatten(self):
+        children = (self.model, self.stress, self.threshold)
+        aux_data = None
+        return children, aux_data
+
+    @classmethod
+    def tree_unflatten(cls, aux_data, children):
+        return cls(*children)
+
+    @partial(jax.jit)
     def apply_seismic_shock(self, key, state):
         """
         Phase 2: Seismography.
@@ -28,7 +39,7 @@ class SeismicWrapper:
         perturbed_state = state + noise
         return perturbed_state
 
-    @partial(jax.jit, static_argnums=(0,))
+    @partial(jax.jit)
     def verify_crystallization(self, original_state, re_annealed_state):
         """
         Phase 3: Crystallization.

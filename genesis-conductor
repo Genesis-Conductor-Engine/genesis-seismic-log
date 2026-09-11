@@ -1,0 +1,10 @@
+import runpy
+import os
+import sys
+
+# Ensure the current directory is in sys.path
+sys.path.append(os.getcwd())
+
+print("Starting Genesis Conductor Proxy...")
+# Execute the actual server script
+runpy.run_path("simple_seismic_server.py", run_name="__main__")

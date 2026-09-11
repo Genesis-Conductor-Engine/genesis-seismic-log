@@ -7,6 +7,7 @@ Compatible with Genesis Conductor protocol
 
 import time
 import json
+import os
 from datetime import datetime
 from fastapi import FastAPI
 import uvicorn
@@ -16,6 +17,42 @@ app = FastAPI(
     description="Q-Mem benchmarking with S-ToT Seismic Stress protocol",
     version="1.0.0"
 )
+
+# Ralph Loop Calculation
+def calculate_ralph_loop(start_val, limit=1000):
+    sequence = [start_val]
+    seen = {start_val: 0}
+    current = start_val
+
+    for i in range(1, limit):
+        if current % 2 == 0:
+            current = current // 2
+        else:
+            current = -3 * current + 1
+
+        if current in seen:
+            loop_start_index = seen[current]
+            loop_part = sequence[loop_start_index:]
+            # Append the current value (which starts the loop again) to show the connection
+            sequence.append(current)
+            return {
+                "status": "LOOP_DETECTED",
+                "start_value": start_val,
+                "steps": i,
+                "sequence_preview": sequence[:10] + ["..."] if len(sequence) > 20 else sequence,
+                "loop_sequence": loop_part,
+                "final_value": current
+            }
+
+        seen[current] = i
+        sequence.append(current)
+
+    return {
+        "status": "LIMIT_REACHED",
+        "start_value": start_val,
+        "steps": limit,
+        "final_value": current
+    }
 
 # System metrics (from Diamond Vault verified logs)
 SYSTEM_METRICS = {
@@ -40,7 +77,8 @@ async def root():
         "endpoints": {
             "live": "/api/bench/live",
             "health": "/api/health",
-            "seismic": "/api/seismic/status"
+            "seismic": "/api/seismic/status",
+            "ralph": "/api/ralph"
         }
     }
 
@@ -56,6 +94,14 @@ async def health():
             "crystallization_verifier": "active"
         }
     }
+
+@app.get("/api/ralph")
+async def ralph_loop(start: int = 23, limit: int = 1000):
+    """
+    Ralph Loop Calculation Endpoint
+    Calculates the -3x+1 sequence.
+    """
+    return calculate_ralph_loop(start, limit)
 
 @app.get("/api/bench/live")
 async def bench_live():
@@ -137,6 +183,6 @@ if __name__ == "__main__":
     uvicorn.run(
         app,
         host="0.0.0.0",
-        port=8003,
+        port=int(os.environ.get("PORT", 8003)),
         log_level="info"
     )

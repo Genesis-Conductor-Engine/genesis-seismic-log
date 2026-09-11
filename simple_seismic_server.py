@@ -6,8 +6,46 @@ Uses Python's built-in http.server module
 
 from http.server import HTTPServer, BaseHTTPRequestHandler, ThreadingHTTPServer
 import json
+import os
 from datetime import datetime
 import time
+from urllib.parse import urlparse, parse_qs
+
+# Ralph Loop Calculation
+def calculate_ralph_loop(start_val, limit=1000):
+    sequence = [start_val]
+    seen = {start_val: 0}
+    current = start_val
+
+    for i in range(1, limit):
+        if current % 2 == 0:
+            current = current // 2
+        else:
+            current = -3 * current + 1
+
+        if current in seen:
+            loop_start_index = seen[current]
+            loop_part = sequence[loop_start_index:]
+            # Append the current value (which starts the loop again) to show the connection
+            sequence.append(current)
+            return {
+                "status": "LOOP_DETECTED",
+                "start_value": start_val,
+                "steps": i,
+                "sequence_preview": sequence[:10] + ["..."] if len(sequence) > 20 else sequence,
+                "loop_sequence": loop_part,
+                "final_value": current
+            }
+
+        seen[current] = i
+        sequence.append(current)
+
+    return {
+        "status": "LIMIT_REACHED",
+        "start_value": start_val,
+        "steps": limit,
+        "final_value": current
+    }
 
 # System metrics
 SYSTEM_METRICS = {
@@ -24,7 +62,11 @@ SYSTEM_METRICS = {
 
 class SeismicHandler(BaseHTTPRequestHandler):
     def do_GET(self):
-        if self.path == "/":
+        parsed_path = urlparse(self.path)
+        path = parsed_path.path
+        query = parse_qs(parsed_path.query)
+
+        if path == "/":
             self.send_json({
                 "service": "Genesis Seismic Log",
                 "version": "1.0.0",
@@ -33,10 +75,11 @@ class SeismicHandler(BaseHTTPRequestHandler):
                 "endpoints": {
                     "live": "/api/bench/live",
                     "health": "/api/health",
-                    "seismic": "/api/seismic/status"
+                    "seismic": "/api/seismic/status",
+                    "ralph": "/api/ralph"
                 }
             })
-        elif self.path == "/api/health":
+        elif path == "/api/health":
             self.send_json({
                 "status": "healthy",
                 "timestamp": datetime.utcnow().isoformat(),
@@ -47,7 +90,12 @@ class SeismicHandler(BaseHTTPRequestHandler):
                     "crystallization_verifier": "active"
                 }
             })
-        elif self.path == "/api/bench/live":
+        elif path == "/api/ralph":
+            start_val = int(query.get('start', [23])[0])
+            limit = int(query.get('limit', [1000])[0])
+            result = calculate_ralph_loop(start_val, limit)
+            self.send_json(result)
+        elif path == "/api/bench/live":
             self.send_json({
                 "timestamp": datetime.utcnow().isoformat(),
                 "system": "GTX 1650 (Diamond Vault)",
@@ -69,7 +117,7 @@ class SeismicHandler(BaseHTTPRequestHandler):
                     "ground_truth": "Ed25519 attestation active"
                 }
             })
-        elif self.path == "/api/seismic/status":
+        elif path == "/api/seismic/status":
             self.send_json({
                 "timestamp": datetime.utcnow().isoformat(),
                 "protocol": "Seismic Tree-of-Thoughts (S-ToT)",
@@ -112,6 +160,7 @@ class SeismicHandler(BaseHTTPRequestHandler):
         self.send_header('Content-Type', 'application/json')
         self.send_header('Access-Control-Allow-Origin', '*')
         self.end_headers()
+        # Optimize JSON size by removing whitespace
         self.wfile.write(json.dumps(data, separators=(',', ':')).encode())
 
     def log_message(self, format, *args):
@@ -119,7 +168,7 @@ class SeismicHandler(BaseHTTPRequestHandler):
         print(f"[{datetime.now().isoformat()}] {format % args}")
 
 if __name__ == "__main__":
-    PORT = 8003
+    PORT = int(os.environ.get("PORT", 8003))
     print("=" * 60)
     print("Genesis Seismic Log Server")
     print("=" * 60)

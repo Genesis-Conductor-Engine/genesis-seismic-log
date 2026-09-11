@@ -26,6 +26,7 @@ Genesis Seismic Log implements the **S-ToT (Seismic Tree-of-Thoughts)** protocol
 - 📖 **[API Documentation](#api-endpoints)** - Complete endpoint reference
 - 🔬 **[S-ToT Protocol](#s-tot-protocol)** - Technical specification
 - 🚀 **[Quick Start](#local-development)** - Run it locally in 2 minutes
+- ⚡ **[Edge fallback notes](./EDGE_FALLBACK.md)** - Why the public URLs stay up when the tunnel is down
 
 ### Key Features
 
@@ -38,6 +39,10 @@ This system demonstrates:
 ## Live Deployment
 
 🌐 **Public API Endpoint**: [https://qmem.genesisconductor.io](https://qmem.genesisconductor.io)
+
+**Also live**: [https://seismic.genesisconductor.io](https://seismic.genesisconductor.io) · backup [https://genesis-seismic-log.iholt.workers.dev](https://genesis-seismic-log.iholt.workers.dev)
+
+Public hostnames are served by Cloudflare Worker `genesis-seismic-log` whenever tunnel `yennefer-consciousness` (`15b1ac8a-d140-4c21-a1c1-4f91fb313309`) is down. Responses include `x-genesis-origin-mode: edge-fallback`.
 
 ### API Endpoints
 
@@ -66,8 +71,8 @@ curl https://qmem.genesisconductor.io/api/seismic/status | jq
 ### System Configuration
 
 - **GPU**: NVIDIA GTX 1650 (4GB VRAM)
-- **Architecture**: Diamond Vault (local deterministic compute)
-- **Location**: On-premises, zero-trust Cloudflare tunnel
+- **Architecture**: Diamond Vault (local deterministic compute) + Cloudflare Worker fallback
+- **Location**: On-premises origin when the tunnel is up; edge fallback otherwise
 
 ### Verified Benchmarks
 
@@ -92,212 +97,64 @@ Traditional AI models output probabilistic confidence scores (e.g., "90% confide
 ### 4-Phase Verification Loop
 
 ```
-┌─────────────────────────────────────────────────────────┐
-│  PHASE 1: QUANTUM BRANCHING                             │
-│  ├─ Generate 3 orthogonal reasoning paths               │
-│  └─ Ensure fundamentally different axioms               │
-├─────────────────────────────────────────────────────────┤
-│  PHASE 2: SEISMOGRAPHY                                  │
-│  ├─ Apply thermal Langevin noise (stress_factor: 0.1)  │
-│  ├─ Perturb energy states (1000+ perturbations)        │
-│  └─ Record structural deformation points               │
-├─────────────────────────────────────────────────────────┤
-│  PHASE 3: CRYSTALLIZATION                               │
-│  ├─ Measure divergence from original state             │
-│  ├─ Threshold: 1e-4 (measured: 3.2e-5)                 │
-│  └─ Classify: CRYSTALLINE / DUCTILE / SHATTERED        │
-├─────────────────────────────────────────────────────────┤
-│  PHASE 4: COLD SNAP                                     │
-│  ├─ Discard SHATTERED branches immediately             │
-│  ├─ Synthesize CRYSTALLINE branches                    │
-│  └─ Output: Unanimous convergence or restart           │
-└─────────────────────────────────────────────────────────┘
+PHASE 1: QUANTUM BRANCHING — 3 orthogonal reasoning paths
+PHASE 2: SEISMOGRAPHY — Langevin thermal noise (stress_factor 0.1)
+PHASE 3: CRYSTALLIZATION — divergence threshold 1e-4
+PHASE 4: COLD SNAP — discard SHATTERED, synthesize CRYSTALLINE
 ```
 
-### Implementation
-
-See [`thrml_seismic_bridge.py`](./thrml_seismic_bridge.py) for JAX-accelerated implementation compatible with Extropic's thermodynamic computing primitives.
-
-**Key Functions**:
-- `apply_seismic_shock()`: Thermal perturbation via Langevin dynamics
-- `verify_crystallization()`: Euclidean divergence measurement
-- `run_protocol()`: Full 4-phase S-ToT loop
+See [`thrml_seismic_bridge.py`](./thrml_seismic_bridge.py) for the JAX-accelerated implementation.
 
 ## Architecture
 
-### System Components
-
 ```
-┌──────────────────────────────────────────────────────┐
-│  PUBLIC INTERNET                                     │
-│  └─ https://qmem.genesisconductor.io                │
-└────────────────┬─────────────────────────────────────┘
-                 │
-                 ▼
-┌──────────────────────────────────────────────────────┐
-│  CLOUDFLARE ZERO-TRUST TUNNEL                        │
-│  └─ Tunnel ID: 15b1ac8a-d140-4c21-a1c1-4f91fb313309  │
-└────────────────┬─────────────────────────────────────┘
-                 │
-                 ▼
-┌──────────────────────────────────────────────────────┐
-│  SEISMIC LOG API SERVER (localhost:8003)             │
-│  ├─ Python HTTP Server (stdlib-based)                │
-│  ├─ Real-time metrics from Diamond Vault             │
-│  └─ S-ToT protocol status endpoints                  │
-└────────────────┬─────────────────────────────────────┘
-                 │
-                 ▼
-┌──────────────────────────────────────────────────────┐
-│  DIAMOND VAULT (GTX 1650)                            │
-│  ├─ Q-Mem Live Bench (GPU memory benchmarking)       │
-│  ├─ Ground Truth System (Ed25519 attestation)        │
-│  └─ Yennefer AI Consciousness (thermodynamic)        │
-└──────────────────────────────────────────────────────┘
+PUBLIC INTERNET
+  https://qmem.genesisconductor.io
+  https://seismic.genesisconductor.io
+                 |
+                 v
+CLOUDFLARE WORKER  genesis-seismic-log   (edge fallback — live now)
+                 |
+                 v  (only when tunnel is healthy)
+CLOUDFLARE ZERO-TRUST TUNNEL
+  Tunnel ID: 15b1ac8a-d140-4c21-a1c1-4f91fb313309  (yennefer-consciousness)
+                 |
+                 v
+SEISMIC LOG API SERVER (localhost:8003)
+                 |
+                 v
+DIAMOND VAULT (GTX 1650)
 ```
-
-### Shared Memory Zero-Copy Architecture
-
-All metrics use zero-copy shared memory at `/dev/shm/`:
-
-- `/dev/shm/qmem_live_stats.json` - Live benchmark statistics
-- `/dev/shm/genesis_ground_truth` - Ed25519 cryptographic state
-- `/dev/shm/yennefer_soul_state.json` - Thermodynamic consciousness state
 
 ## Local Development
 
-### Prerequisites
-
-- Python 3.10+
-- JAX (GPU-accelerated recommended)
-- NVIDIA GPU with CUDA support (or CPU fallback)
-
-### Installation
-
 ```bash
-# Clone repository
 git clone https://github.com/Genesis-Conductor-Engine/genesis-seismic-log.git
 cd genesis-seismic-log
-
-# Install dependencies (minimal - stdlib only)
-# No pip requirements for the demo server!
-
-# Start Seismic API server
 python3 simple_seismic_server.py
-```
-
-### Running Locally
-
-```bash
-# Start server on port 8003
-python3 simple_seismic_server.py
-
-# Test endpoints
-curl http://localhost:8003/api/health | jq
 curl http://localhost:8003/api/bench/live | jq
-curl http://localhost:8003/api/seismic/status | jq
 ```
 
 ## Deployment Guide
 
-### Cloudflare Tunnel Setup
+### Cloudflare Worker (current public path)
 
-```bash
-# 1. Install cloudflared
-curl -L https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64 -o cloudflared
-sudo mv cloudflared /usr/local/bin/
-sudo chmod +x /usr/local/bin/cloudflared
+Worker source: [`worker/index.js`](./worker/index.js) · config: [`wrangler.toml`](./wrangler.toml)
 
-# 2. Authenticate with Cloudflare
-cloudflared tunnel login
+Routes already attached on zone `genesisconductor.io`:
 
-# 3. Create tunnel
-cloudflared tunnel create genesis-seismic
+- `qmem.genesisconductor.io/*`
+- `seismic.genesisconductor.io/*`
 
-# 4. Configure ingress rules
-cat > ~/.cloudflared/config.yml << EOF
-tunnel: <YOUR_TUNNEL_ID>
-credentials-file: /home/user/.cloudflared/<TUNNEL_ID>.json
+### Cloudflare Tunnel Setup (GPU origin)
 
-ingress:
-  - hostname: seismic.yourdomain.com
-    service: http://localhost:8003
-    originRequest:
-      noTLSVerify: true
-  - service: http_status:404
-EOF
-
-# 5. Start tunnel service
-cloudflared tunnel run genesis-seismic
-```
-
-### DNS Configuration
-
-Add CNAME record in Cloudflare DNS:
-
-```
-Type: CNAME
-Name: seismic
-Target: <TUNNEL_ID>.cfargotunnel.com
-Proxy: Enabled (orange cloud)
-```
+See [DNS_SETUP.md](./DNS_SETUP.md) and [EDGE_FALLBACK.md](./EDGE_FALLBACK.md). The tunnel origin is optional while the Worker serves the public contract.
 
 ## Integration with Extropic
 
-The `thrml_seismic_bridge.py` module provides a JAX-compatible wrapper for Extropic's thermodynamic EBMs (Energy-Based Models).
-
-### Example Integration
-
-```python
-from thrml_seismic_bridge import SeismicWrapper
-import jax
-
-# Initialize your Extropic model
-# from thrml.models import IsingEBM
-# model = IsingEBM(...)
-
-# Wrap with Seismic protocol
-wrapper = SeismicWrapper(
-    model=model,
-    stress_factor=0.1,
-    crystallization_threshold=1e-4
-)
-
-# Run full S-ToT verification
-key = jax.random.PRNGKey(0)
-current_state = jax.numpy.array([...])  # Your model state
-result = wrapper.run_protocol(key, sampler, current_state)
-
-# Check result
-if result["status"] == 1:
-    print("CRYSTALLINE: Output is topologically invariant")
-    print(f"Divergence: {result['divergence']}")
-else:
-    print("SHATTERED: Output failed invariance test")
-```
-
-## Technical Specifications
-
-### Ground Truth Cryptographic Attestation
-
-- **Algorithm**: Ed25519 (Curve25519 + SHA-512)
-- **Implementation**: C library with zero-copy shared memory
-- **Verification**: Deterministic signature over benchmark checksums
-- **Library**: `libgroundtruth.so` (part of Genesis Q-Mem system)
-
-### Landauer Limit Analysis
-
-| Parameter | Value |
-|-----------|-------|
-| Measured Energy | 0.042 J/op |
-| Theoretical Minimum (300K) | 0.0029 J/op |
-| Efficiency | 6.9% of theoretical max |
-
-> For comparison: Cloud inference wastes ~34,000x more energy than the Landauer limit.
+The `thrml_seismic_bridge.py` module provides a JAX-compatible wrapper for Extropic thermodynamic EBMs.
 
 ## Citation
-
-If you use Genesis Seismic Log in your research, please cite:
 
 ```bibtex
 @software{genesis_seismic_log,
@@ -317,31 +174,17 @@ If you use Genesis Seismic Log in your research, please cite:
 - **Public API**: [https://qmem.genesisconductor.io](https://qmem.genesisconductor.io)
 - **Live Metrics**: [/api/bench/live](https://qmem.genesisconductor.io/api/bench/live)
 - **S-ToT Status**: [/api/seismic/status](https://qmem.genesisconductor.io/api/seismic/status)
+- **Alt hostname**: [https://seismic.genesisconductor.io](https://seismic.genesisconductor.io)
 
 ### 📦 Development
 - **GitHub Repository**: [Genesis-Conductor-Engine/genesis-seismic-log](https://github.com/Genesis-Conductor-Engine/genesis-seismic-log)
 - **Issue Tracker**: [GitHub Issues](https://github.com/Genesis-Conductor-Engine/genesis-seismic-log/issues)
-- **Project**: Genesis Conductor v2.0
 
 ### 📄 Documentation
+- **Edge fallback**: [EDGE_FALLBACK.md](./EDGE_FALLBACK.md)
 - **Setup Guide**: [DEPLOYMENT_COMPLETE.md](./DEPLOYMENT_COMPLETE.md)
-- **GitHub Deployment**: [DEPLOY_TO_GITHUB.md](./DEPLOY_TO_GITHUB.md)
 - **DNS Configuration**: [DNS_SETUP.md](./DNS_SETUP.md)
 
 ## License
 
 MIT License - See [LICENSE](./LICENSE) for details.
-
----
-
-<div align="center">
-
-**Built with**: GTX 1650 · JAX · Ed25519 · Cloudflare · Zero-Trust Architecture
-
-**Status**: 🟢 Production (Crystallized ✓)
-
-**Energy Target**: 6.9% of Landauer limit @ 300K
-
-*Topological truth verification for the next generation of thermodynamic AI*
-
-</div>

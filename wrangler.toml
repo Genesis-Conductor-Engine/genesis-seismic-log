@@ -1,0 +1,12 @@
+name = "genesis-seismic-log"
+main = "worker/index.js"
+compatibility_date = "2025-11-01"
+workers_dev = true
+
+[[routes]]
+pattern = "qmem.genesisconductor.io/*"
+zone_name = "genesisconductor.io"
+
+[[routes]]
+pattern = "seismic.genesisconductor.io/*"
+zone_name = "genesisconductor.io"

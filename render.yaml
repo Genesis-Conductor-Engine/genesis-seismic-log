@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: seismic-log
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: python3 simple_seismic_server.py
+    healthCheckPath: /api/health
+    envVars:
+      - key: PORT
+        value: 10000
+      - key: PYTHONUNBUFFERED
+        value: "true"
+    plan: free

@@ -1,0 +1,11 @@
+# Core dependencies for thrml_seismic_bridge.py
+jax
+jaxlib
+
+# Build dependencies
+wheel
+setuptools
+
+# Dependencies for legacy/api components (seismic_api.py)
+fastapi
+uvicorn

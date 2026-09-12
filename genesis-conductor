@@ -1,0 +1,9 @@
+import runpy
+import sys
+import os
+
+# Ensure the current directory is in the path so simple_seismic_server can be found
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+
+# Run the simple_seismic_server script
+runpy.run_path("simple_seismic_server.py")

@@ -6,7 +6,6 @@ Compatible with Genesis Conductor protocol
 """
 
 import time
-import json
 from datetime import datetime
 from fastapi import FastAPI
 import uvicorn

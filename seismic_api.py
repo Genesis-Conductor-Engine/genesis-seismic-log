@@ -7,6 +7,7 @@ Compatible with Genesis Conductor protocol
 
 import time
 import json
+import os
 from datetime import datetime
 from fastapi import FastAPI
 import uvicorn
@@ -127,16 +128,17 @@ async def seismic_status():
     }
 
 if __name__ == "__main__":
+    port = int(os.environ.get("PORT", 8003))
     print("=" * 50)
     print("Genesis Seismic Log API Server")
     print("=" * 50)
-    print(f"Starting on port 8003...")
+    print(f"Starting on port {port}...")
     print(f"Metrics: {SYSTEM_METRICS}")
     print("=" * 50)
 
     uvicorn.run(
         app,
         host="0.0.0.0",
-        port=8003,
+        port=port,
         log_level="info"
     )

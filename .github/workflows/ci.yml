@@ -1,0 +1,9 @@
+name: submit-pypi
+on:
+  workflow_dispatch:
+
+jobs:
+  disabled:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Workflow disabled due to billing lock"

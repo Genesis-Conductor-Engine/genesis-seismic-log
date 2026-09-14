@@ -109,10 +109,10 @@ class SeismicHandler(BaseHTTPRequestHandler):
 
     def send_json(self, data):
         self.send_response(200)
-        self.send_header('Content-Type', 'application/json')
+        self.send_header('Content-Type', 'application/json; charset=utf-8')
         self.send_header('Access-Control-Allow-Origin', '*')
         self.end_headers()
-        self.wfile.write(json.dumps(data, separators=(',', ':')).encode())
+        self.wfile.write(json.dumps(data, separators=(',', ':')).encode('utf-8'))
 
     def log_message(self, format, *args):
         """Override to customize logging"""

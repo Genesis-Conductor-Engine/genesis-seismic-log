@@ -9,6 +9,18 @@ import json
 from datetime import datetime
 import time
 
+STATIC_ROOT_RESPONSE = json.dumps({
+    "service": "Genesis Seismic Log",
+    "version": "1.0.0",
+    "status": "operational",
+    "protocol": "S-ToT (Seismic Tree-of-Thoughts)",
+    "endpoints": {
+        "live": "/api/bench/live",
+        "health": "/api/health",
+        "seismic": "/api/seismic/status"
+    }
+}, separators=(',', ':')).encode()
+
 # System metrics
 SYSTEM_METRICS = {
     "hash_throughput_ops_sec": 15265,
@@ -25,17 +37,7 @@ SYSTEM_METRICS = {
 class SeismicHandler(BaseHTTPRequestHandler):
     def do_GET(self):
         if self.path == "/":
-            self.send_json({
-                "service": "Genesis Seismic Log",
-                "version": "1.0.0",
-                "status": "operational",
-                "protocol": "S-ToT (Seismic Tree-of-Thoughts)",
-                "endpoints": {
-                    "live": "/api/bench/live",
-                    "health": "/api/health",
-                    "seismic": "/api/seismic/status"
-                }
-            })
+            self.send_json(STATIC_ROOT_RESPONSE)
         elif self.path == "/api/health":
             self.send_json({
                 "status": "healthy",
@@ -112,7 +114,10 @@ class SeismicHandler(BaseHTTPRequestHandler):
         self.send_header('Content-Type', 'application/json')
         self.send_header('Access-Control-Allow-Origin', '*')
         self.end_headers()
-        self.wfile.write(json.dumps(data, separators=(',', ':')).encode())
+        if isinstance(data, bytes):
+            self.wfile.write(data)
+        else:
+            self.wfile.write(json.dumps(data, separators=(',', ':')).encode())
 
     def log_message(self, format, *args):
         """Override to customize logging"""

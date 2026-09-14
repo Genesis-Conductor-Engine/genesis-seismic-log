@@ -41,6 +41,7 @@ class SeismicWrapper:
         is_crystalline = divergence < self.threshold
         return is_crystalline, divergence
 
+    @partial(jax.jit, static_argnums=(0, 2))
     def run_protocol(self, key, sampler, current_state):
         """
         Full S-ToT Loop:
